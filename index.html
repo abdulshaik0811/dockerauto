@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartoon World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: #ffcc00;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff3366;
+        }
+
+        .logo i {
+            color: #ff3366;
+            font-size: 32px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #3366ff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: #ff3366;
+            color: white;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 0 #ff3366;
+        }
+
+        .hero p {
+            font-size: 22px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #ffcc00;
+            font-weight: 500;
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px 0 0 30px;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box button {
+            background: #ff3366;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #ff0044;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 40px 0 30px;
+            font-size: 36px;
+            color: #ffcc00;
+            text-shadow: 2px 2px 0 #ff3366;
+        }
+
+        .cartoons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .cartoon-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .cartoon-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cartoon-image {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-bottom: 5px solid #ffcc00;
+        }
+
+        .cartoon-info {
+            padding: 20px;
+        }
+
+        .cartoon-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #3366ff;
+        }
+
+        .cartoon-year {
+            color: #888;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .cartoon-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3366ff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #2954df;
+            transform: scale(1.05);
+        }
+
+        .btn-favorite {
+            background-color: #ff3366;
+        }
+
+        .btn-favorite:hover {
+            background-color: #ff0044;
+        }
+
+        .favorites-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .favorites-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+
+        .favorite-item {
+            flex: 0 0 auto;
+            width: 200px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .favorite-item img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .favorite-item p {
+            padding: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #3366ff;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 12px 25px;
+            background: #ffcc00;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #3366ff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: #ff3366;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: #ffcc00;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 5px solid #ff3366;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icons a {
+            color: #3366ff;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #ff3366;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .cartoons {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-smile"></i>
+                    <span>Cartoon World</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#">Classics</a></li>
+                        <li><a href="#">New Shows</a></li>
+                        <li><a href="#">Characters</a></li>
+                        <li><a href="#">Games</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to Cartoon World!</h1>
+            <p>Discover your favorite cartoons, characters, and episodes all in one place!</p>
+            <div class="search-box">
+                <input type="text" placeholder="Search for cartoons...">
+                <button><i class="fas fa-search"></i> Search</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">Popular Cartoons</h2>
+        
+        <div class="categories">
+            <button class="category-btn active">All</button>
+            <button class="category-btn">Classic</button>
+            <button class="category-btn">Adventure</button>
+            <button class="category-btn">Comedy</button>
+            <button class="category-btn">Superhero</button>
+        </div>
+        
+        <div class="cartoons">
+            <div class="cartoon-card">
+                <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Spider-Man" class="cartoon-image">
+                <div class="cartoon-info">
+                    <h3 class="cartoon-title">Spider-Man</h3>
+                    <p class="cartoon-year">2020 - Present</p>
+                    <div class="cartoon-actions">
+                        <button class="btn">Watch</button>
+                        <button class="btn btn-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cartoon-card">
+                <img src="https://images.unsplash.com/photo-1626204327508-5f5a6a4c24a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Tom and Jerry" class="cartoon-image">
+                <div class="cartoon-info">
+                    <h3 class="cartoon-title">Tom and Jerry</h3>
+                    <p class="cartoon-year">1960 - Present</p>
+                    <div class="cartoon-actions">
+                        <button class="btn">Watch</button>
+                        <button class="btn btn-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cartoon-card">
+                <img src="https://images.unsplash.com/photo-1632076056736-c64b6b593f48?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Mickey Mouse" class="cartoon-image">
+                <div class="cartoon-info">
+                    <h3 class="cartoon-title">Mickey Mouse</h3>
+                    <p class="cartoon-year">1928 - Present</p>
+                    <div class="cartoon-actions">
+                        <button class="btn">Watch</button>
+                        <button class="btn btn-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cartoon-card">
+                <img src="https://images.unsplash.com/photo-1596727147705-61a532a659bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Batman" class="cartoon-image">
+                <div class="cartoon-info">
+                    <h3 class="cartoon-title">Batman</h3>
+                    <p class="cartoon-year">1992 - Present</p>
+                    <div class="cartoon-actions">
+                        <button class="btn">Watch</button>
+                        <button class="btn btn-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cartoon-card">
+                <img src="https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Pokemon" class="cartoon-image">
+                <div class="cartoon-info">
+                    <h3 class="cartoon-title">Pokemon</h3>
+                    <p class="cartoon-year">1997 - Present</p>
+                    <div class="cartoon-actions">
+                        <button class="btn">Watch</button>
+                        <button class="btn btn-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cartoon-card">
+                <img src="https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Dragon Ball" class="cartoon-image">
+                <div class="cartoon-info">
+                    <h3 class="cartoon-title">Dragon Ball Z</h3>
+                    <p class="cartoon-year">1989 - 1996</p>
+                    <div class="cartoon-actions">
+                        <button class="btn">Watch</button>
+                        <button class="btn btn-favorite"><i class="fas fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="favorites-section">
+            <h2 class="section-title">Your Favorites</h2>
+            <div class="favorites-container">
+                <div class="favorite-item">
+                    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Spider-Man">
+                    <p>Spider-Man</p>
+                </div>
+                <div class="favorite-item">
+                    <img src="https://images.unsplash.com/photo-1596727147705-61a532a659bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Batman">
+                    <p>Batman</p>
+                </div>
+                <div class="favorite-item">
+                    <img src="https://images.unsplash.com/photo-1596466596120-2a8e4b5d1a51?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Pokemon">
+                    <p>Pokemon</p>
+                </div>
+                <div class="favorite-item">
+                    <img src="https://images.unsplash.com/photo-1626204327508-5f5a6a4c24a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=60" alt="Tom and Jerry">
+                    <p>Tom and Jerry</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <i class="fas fa-smile"></i>
+                    <span>Cartoon World</span>
+                </div>
+                <p>© 2023 Cartoon World. All rights reserved.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Favorite buttons functionality
+            const favoriteButtons = document.querySelectorAll('.btn-favorite');
+            const favoritesContainer = document.querySelector('.favorites-container');
+            
+            favoriteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const card = this.closest('.cartoon-card');
+                    const title = card.querySelector('.cartoon-title').textContent;
+                    const imageSrc = card.querySelector('.cartoon-image').src;
+                    
+                    if (this.classList.contains('active')) {
+                        this.innerHTML = '<i class="fas fa-heart"></i>';
+                        // Add to favorites
+                        addToFavorites(title, imageSrc);
+                    } else {
+                        this.innerHTML = '<i class="far fa-heart"></i>';
+                        // Remove from favorites
+                        removeFromFavorites(title);
+                    }
+                });
+            });
+            
+            // Category buttons functionality
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    // In a real app, this would filter the cartoons
+                });
+            });
+            
+            // Search functionality
+            const searchBox = document.querySelector('.search-box input');
+            const searchButton = document.querySelector('.search-box button');
+            
+            searchButton.addEventListener('click', function() {
+                performSearch(searchBox.value);
+            });
+            
+            searchBox.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch(searchBox.value);
+                }
+            });
+            
+            // Function to add to favorites
+            function addToFavorites(title, imageSrc) {
+                // Check if already in favorites
+                const existingFavorites = Array.from(favoritesContainer.querySelectorAll('p'));
+                if (existingFavorites.some(item => item.textContent === title)) {
+                    return;
+                }
+                
+                const favoriteItem = document.createElement('div');
+                favoriteItem.className = 'favorite-item';
+                favoriteItem.innerHTML = `
+                    <img src="${imageSrc}" alt="${title}">
+                    <p>${title}</p>
+                `;
+                favoritesContainer.appendChild(favoriteItem);
+            }
+            
+            // Function to remove from favorites
+            function removeFromFavorites(title) {
+                const favoriteItems = favoritesContainer.querySelectorAll('.favorite-item');
+                favoriteItems.forEach(item => {
+                    if (item.querySelector('p').textContent === title) {
+                        item.remove();
+                    }
+                });
+            }
+            
+            // Function to perform search
+            function performSearch(query) {
+                if (query.trim() !== '') {
+                    alert(`Searching for: ${query}`);
+                    // In a real app, this would filter the cartoons
+                }
+            }
+        });
+    </script>
+</body>
+</html>
