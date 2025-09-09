@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/abdulshaik0811/dockerauto.git'
+            }
+        }
+        stage('Docker build') {
+            steps {
+                sh 'docker build -t image1:v3 .'
+            }
+        }
+        stage('Docker tag & push') {
+            steps {
+                sh 'docker login -u abdulshaik0811 -p Abdul@1420'
+                sh 'docker tag image1:v3 abdulshaik0811/myrepo:image3'
+                sh 'docker push abdulshaik0811/myrepo:image3'
+            }
+        }
+        stage('Docker Run') {
+            steps {
+                sh 'docker run -itd --name cont-4 -p 1133:80 abdulshaik0811/myrepo:image3'
+            }
+        }
+    }
+}
